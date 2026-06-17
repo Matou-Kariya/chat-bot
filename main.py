@@ -1,6 +1,6 @@
-def main():
-    print("Hello from chat-bot!")
+from fastapi import FastAPI
+from napcat.napcat_event import router as napcat_router
+app = FastAPI(title="Chat Bot")
 
 
-if __name__ == "__main__":
-    main()
+app.include_router(napcat_router, prefix="/napcat", tags=["NapCat"])
