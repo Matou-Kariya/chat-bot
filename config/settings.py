@@ -27,6 +27,13 @@ class Settings(BaseSettings):
     QWEN_IMAGE_MODEL: str
     QWEN_ASR_MODEL: str
 
+    # NAPCAT
+    BOT_QQ: str
+    GROUP_QQ: str
+    IMAGE_SAVE_DIR: str
+    VOICE_SAVE_DIR: str
+    NAPCAT_BASE_URL: str
+    NAPCAT_TOKEN: str
 
 @lru_cache
 def get_settings() -> Settings:

@@ -7,6 +7,8 @@ from sqlalchemy.orm import Session
 class NapcatService:
     @staticmethod
     def save_message(event: dict, db: Session):
+        if not NapcatMessageUtil.should_process(event):
+            return
         group_message = NapcatMessageUtil.to_group_message(event)
         group_message_attachment = NapcatMessageUtil.to_group_message_attachments(event)
         try:

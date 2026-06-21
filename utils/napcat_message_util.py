@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Any
 
+from config.settings import settings
 from entity.group_message import GroupMessage
 from entity.group_message_attachment import GroupMessageAttachment
 
@@ -101,24 +102,51 @@ class NapcatMessageUtil:
                 texts.append(text)
         return ",".join(texts).strip()
 
+    # 获取消息发送人用户名
     @staticmethod
     def _get_nickname(sender: dict[str, Any]) -> str:
         return str(sender.get("card") or sender.get("nickname") or "")
 
+    # 转日期
     @staticmethod
     def _to_datetime(timestamp: Any) -> datetime | None:
         if timestamp is None or timestamp == "":
             return None
         return datetime.fromtimestamp(int(timestamp))
 
+    # 群id等转字符串
     @staticmethod
     def _to_optional_str(value: Any) -> str | None:
         if value is None or value == "":
             return None
         return str(value)
 
+    # 群id等转int
     @staticmethod
     def _to_int(value: Any) -> int | None:
         if value is None or value == "":
             return None
         return int(value)
+
+    # 消息过滤，过滤资深，非群消息
+    @staticmethod
+    def should_process(raw_event: dict[str, Any]) -> bool:
+        user_id = str(raw_event.get("user_id") or "")
+        if user_id == settings.BOT_QQ:
+            return False
+        if raw_event.get("post_type") != "message" or raw_event.get("message_type") != "group":
+            return False
+        return True
+
+    # 判断消息是否为艾特
+    @staticmethod
+    def is_at_bot(raw_event: dict) -> bool:
+        # array 消息格式下，message 是数组
+        message_array = raw_event.get("message") or []
+        for item in message_array:
+            if item.get("type") == "at":
+                data = item.get("data") or {}
+                qq = str(data.get("qq"))
+                if qq == settings.BOT_QQ:
+                    return True
+        return False
