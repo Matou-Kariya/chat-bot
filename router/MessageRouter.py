@@ -16,9 +16,10 @@ class MessageRouter:
             # 有人艾特机器人
             pass
         else:
-            pass
+            MessageRouter._router(raw_event)
 
     # 用于路由常规非艾特的消息
     @staticmethod
     def _router(raw_event: dict):
-        pass
+        # 判断是否复读，获取最近的3条相同消息，若均相同则考虑开始复制
+
