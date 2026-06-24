@@ -22,4 +22,4 @@ class MessageRouter:
     @staticmethod
     def _router(raw_event: dict):
         # 判断是否复读，获取最近的3条相同消息，若均相同则考虑开始复制
-
+        pass
